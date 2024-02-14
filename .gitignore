@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+
+CMakeCache.txt
+cmake_install.cmake
+build.ninja
+CMakeFiles/
+.ninja*
