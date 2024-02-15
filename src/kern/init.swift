@@ -1,9 +1,9 @@
 
 
 
-@c_decl("init")
-func init() {
- 
+@_cdecl("initialize")
+func initialize() {
+
     while true  {
 
     }
