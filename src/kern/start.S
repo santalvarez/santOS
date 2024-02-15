@@ -20,7 +20,7 @@ start:
   bl	bzero
 
   // Call nullproc to start santOS (does not return)
-  bl	init
+  bl	initialize
 
 // Function to zero memory (r0 is lowest addr; r1 is highest)
 bzero:

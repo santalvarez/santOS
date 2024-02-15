@@ -9,21 +9,23 @@ set(SANTOS_IMG "santOS.img")
 
 set(LINKER_SCRIPT "ld.script")
 
-#set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
-set(CMAKE_ASM_COMPILER "arm-none-eabi-as")
+set(CMAKE_C_COMPILER "arm-none-eabi-gcc")
 set(CMAKE_OBJCOPY "arm-none-eabi-objcopy")
 
 
+set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
+
 set(MKIMAGE_PATH "tools/mkimage")
 
-set(CMAKE_Swift_COMPILER "/opt/swift/usr/bin")
+set(CMAKE_Swift_COMPILER "/opt/swift/usr/bin/swiftc")
 
 set(CMAKE_Swift_FLAGS
     # -wmo: Whole-module optimization is always required for Embedded Swift.
     # -Xfrontend -function-sections: enables dead stripping of unused runtime functions.
-    "-target armv7a-none-none-eabi \
+    "-target armv7-none-none-eabi \
     -enable-experimental-feature Embedded \
     -wmo \
+    -use-ld=/usr/bin/arm-none-none-eabi-ld \
     -Xfrontend -function-sections"
 )
 
@@ -32,8 +34,7 @@ set(CMAKE_Swift_FLAGS
 # includes `print()`, which isn't available in Embedded Swift.
 set(CMAKE_Swift_COMPILER_FORCED TRUE)
 
-project(santOS LANGUAGES Swift C ASM)
-
+project(santOS LANGUAGES Swift C)
 set(CMAKE_C_STANDARD 11)
 
 include_directories("${SRC_DIR}/include")
@@ -42,7 +43,7 @@ include_directories("${SRC_DIR}/include")
 add_executable(${SANTOS_ELF}
                ${SRC_DIR}/kern/start.S
                ${SRC_DIR}/kern/init.swift)
-target_link_libraries(${SANTOS_ELF} PRIVATE -nostdlib)
+#target_link_libraries(${SANTOS_ELF} PRIVATE -nostdlib)
 set_target_properties(${SANTOS_ELF} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
 
 # using objcopy, convert elf to binary
