@@ -3,9 +3,9 @@
 // start - Initial entry point for santOS
 
 .text
-.globl	start			// Declare entry point global
+.globl	_start			// Declare entry point global
 
-start:
+_start:
   // Load the stack pointer with end of memory
   ldr	sp, =MAXADDR
 
