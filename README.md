@@ -1,5 +1,6 @@
 # santOS
 An operating system developed in Swift.
+NOTE: Its still in the very early stages.
 
 Currently the following archs are supported:
 * ARMv7
