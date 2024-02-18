@@ -1,11 +1,16 @@
 # santOS
-An operating system developed in Swift
+An operating system developed in Swift.
 
-
- Swift Embedded Relevant Links
-* [Vision](https://github.com/apple/swift-evolution/blob/main/visions/embedded-swift.md)
-* [User Manual](https://github.com/apple/swift/blob/main/docs/EmbeddedSwift/UserManual.md)
+Currently the following archs are supported:
+* ARMv7
 
 
 ## Build
-To build we use cmake and ninja.
+To build the project, run the following commands:
+```bash
+cd santOS
+mkdir build
+cd build
+cmake -G Ninja ..
+ninja uboot
+```

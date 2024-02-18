@@ -24,10 +24,8 @@ set(CMAKE_Swift_FLAGS
     -enable-experimental-feature Embedded \
     -wmo \
     -use-ld=/usr/bin/arm-none-eabi-ld \
-    -parse-stdlib \
     -Xcc -fshort-enums \
     -Xcc -mfloat-abi=soft \
-    -Xlinker --script=${LINKER_SCRIPT} \
     -Xfrontend -function-sections"
 )
 
@@ -42,12 +40,14 @@ set(CMAKE_C_STANDARD 11)
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
 
-# build elf using object files
+# Build ELF
 add_executable(${SANTOS_ELF}
                ${CMAKE_SOURCE_DIR}/kern/start.S
                ${CMAKE_SOURCE_DIR}/kern/init.swift)
-# add library path to linker
-target_link_libraries(${SANTOS_ELF} PRIVATE "-L${CMAKE_SOURCE_DIR}")
+target_link_libraries(${SANTOS_ELF}
+                      PRIVATE "-L${CMAKE_SOURCE_DIR}/compile/armv7/lib"
+                      PRIVATE "-L/usr/lib/arm-none-eabi/newlib"
+                      PRIVATE "-Xlinker -T${LINKER_SCRIPT}")
 
 # using objcopy, convert elf to binary
 add_custom_command(
