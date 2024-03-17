@@ -19,7 +19,7 @@ _start:
   ldr	r1, =end
   bl	bzero
 
-  // Call nullproc to start santOS (does not return)
+  // Call initialize to start santOS (does not return)
   bl	initialize
 
 // Function to zero memory (r0 is lowest addr; r1 is highest)

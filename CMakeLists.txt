@@ -17,6 +17,10 @@ set(CMAKE_Swift_COMPILER "/opt/swift/usr/bin/swiftc")
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE "STATIC_LIBRARY")
 
+set(CMAKE_C_FLAGS "-mcpu=cortex-a8 -mthumb -mfloat-abi=soft")
+set(CMAKE_ASM_FLAGS "-mcpu=cortex-a8 -mthumb -mfloat-abi=soft")
+
+
 set(CMAKE_Swift_FLAGS
     # -wmo: Whole-module optimization is always required for Embedded Swift.
     # -Xfrontend -function-sections: enables dead stripping of unused runtime functions.
@@ -24,9 +28,12 @@ set(CMAKE_Swift_FLAGS
     -enable-experimental-feature Embedded \
     -wmo \
     -use-ld=/usr/bin/arm-none-eabi-ld \
+    -Xcc -mthumb \
+    -Xcc -mcpu=cortex-a8 \
     -Xcc -fshort-enums \
     -Xcc -mfloat-abi=soft \
-    -Xfrontend -function-sections"
+    -Xfrontend -function-sections \
+    -import-objc-header ${CMAKE_SOURCE_DIR}/include/bridge.h"
 )
 
 # Disable CMake’s automatic Swift compiler check. The compiler check always
@@ -37,12 +44,19 @@ set(CMAKE_Swift_COMPILER_FORCED TRUE)
 
 project(santOS LANGUAGES Swift C ASM)
 set(CMAKE_C_STANDARD 11)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories("${CMAKE_SOURCE_DIR}/include")
 
 # Build ELF
 add_executable(${SANTOS_ELF}
                ${CMAKE_SOURCE_DIR}/kern/start.S
+               ${CMAKE_SOURCE_DIR}/kern/interrupt.S
+               ${CMAKE_SOURCE_DIR}/lib/libc/libc_hooks.c
+               ${CMAKE_SOURCE_DIR}/lib/posix_memalign.c
+               ${CMAKE_SOURCE_DIR}/lib/arc4random.c
+               ${CMAKE_SOURCE_DIR}/lib/putchar.c
+               ${CMAKE_SOURCE_DIR}/kern/putc.swift
                ${CMAKE_SOURCE_DIR}/kern/init.swift)
 target_link_libraries(${SANTOS_ELF}
                       PRIVATE "-L${CMAKE_SOURCE_DIR}/compile/armv7/lib"

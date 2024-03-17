@@ -58,3 +58,4 @@ build.ninja
 CMakeFiles/
 .ninja*
 build/
+.vscode
