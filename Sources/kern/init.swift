@@ -1,7 +1,8 @@
 
 
-@_cdecl("initialize")
+@_silgen_name("initialize")
 func initialize() {
+
     print("santOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 }
 
