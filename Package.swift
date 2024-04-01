@@ -8,7 +8,7 @@ let package = Package(
         .library(name: "santOS", type: .static, targets: ["santOS"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-mmio", from: "0.0.2")
+        .package(url: "https://github.com/apple/swift-mmio", branch: "swift-embedded-examples")
     ],
     targets: [
         .target(
