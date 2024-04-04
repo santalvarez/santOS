@@ -1,23 +1,52 @@
 
 
+
+let uart = UART0(unsafeAddress: kUART0BaseAddress)
+
+func receive() -> UInt8 {
+    return UInt8(uart.RHR.read().raw.RHR)
+}
+
+func transmit(value: UInt8) {
+    uart.THR.write { $0.raw.THR = UInt16(value)}
+}
+
+func waitReadBufferFull() {
+}
+
+func waitWriteBufferEmpty() {
+    while uart.LSR.read().raw.TXSRE == 0 {}
+}
+
+
 @_silgen_name("initialize")
 func initialize() {
     
-    let uart = UART0(unsafeAddress: kUART0BaseAddress)
-    
+    // Divisor latch enable (allow access to DLH and DLL)
     uart.LCR.modify { $0.Div = true }
     // Set the baud rate
-    uart.DLH.modify { $0.ClockMSB = BitField6(storage: 0 as UInt) }
-    uart.DLL.modify { $0.ClockLSB = BitField8(storage: 26 as UInt) }
+    // Baud rate divisor = 48,000,000 / (16 * 115200) ≈ 26.0417
+    uart.DLH.modify { $0.raw.ClockMSB = 0 }
+    uart.DLL.modify { $0.raw.ClockLSB = 26 }
     
     uart.LCR.modify {
-        $0.CharLength = BitField2(storage: 0x3 as UInt) // 8 bit char length
+        $0.raw.CharLength = 0x3 // 8 bit char length
         $0.NBStop = false  // 1 stop bit
         $0.Parity = false  // No parity
     }
+    // Disable FIFO
+    uart.FCR.modify {
+        $1.EN = false
+    }
     
+    // 16x mode (required by AM335X)
+    uart.MDR1.modify { $0.raw.ModeSelect = 0 }
 
-    print("santOS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    print("santOS on BeagleBone Black!!!!!!!!!")
+    
+    while true {
+        
+    }
 }
 
 
