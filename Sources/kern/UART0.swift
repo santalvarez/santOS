@@ -10,6 +10,12 @@ let kUART0BaseAddress: UInt = 0x44E0_9000
 struct UART0 {
     
     @RegisterBank(offset: 0x0)
+    var THR: Register<THRRegister>
+    
+    @RegisterBank(offset: 0x0)
+    var RHR: Register<RHRRegister>
+    
+    @RegisterBank(offset: 0x0)
     var DLL: Register<DLLRegister>
     
     @RegisterBank(offset: 0x4)
@@ -20,21 +26,38 @@ struct UART0 {
     
     @RegisterBank(offset: 0xC)
     var LCR: Register<LCRRegister>
+    
+    @RegisterBank(offset: 0x14)
+    var LSR: Register<LSRRegister>
      
     @RegisterBank(offset: 0x20)
     var MDR1: Register<MDR1Register>
 }
 
+// Transmitter Holding Register
+@Register(bitWidth: 16)
+struct THRRegister {
+    
+    @WriteOnly(bits: 0..<8)
+    var THR: THRField
+}
+
+// Receiver Holding Register
+@Register(bitWidth: 16)
+struct RHRRegister {
+    @ReadOnly(bits: 0..<8)
+    var RHR: RHRField
+}
 
 @Register(bitWidth: 16)
 struct DLLRegister {
-    @ReadWrite(bits: 0..<8, as: BitField8.self)
+    @ReadWrite(bits: 0..<8)
     var ClockLSB: ClockLSBField
 }
 
 @Register(bitWidth: 16)
 struct DLHRegister {
-    @ReadWrite(bits: 0..<6, as: BitField6.self)
+    @ReadWrite(bits: 0..<6)
     var ClockMSB: ClockMSBField
 }
 
@@ -59,7 +82,7 @@ struct LCRRegister {
     @ReadWrite(bits: 2..<3, as: Bool.self)
     var NBStop: NBStopField
     
-    @ReadWrite(bits: 0..<2, as: BitField2.self)
+    @ReadWrite(bits: 0..<2)
     var CharLength: CharLengthField
 }
 
@@ -82,7 +105,7 @@ struct MDR1Register {
     @ReadWrite(bits: 3..<4, as: Bool.self)
     var IRSSleep: IRSSleepField
     
-    @ReadWrite(bits: 0..<3, as: BitField3.self)
+    @ReadWrite(bits: 0..<3)
     var ModeSelect: ModeSelectField
     
 }
@@ -90,10 +113,10 @@ struct MDR1Register {
 @Register(bitWidth: 16)
 struct FCRRegister {
     
-    @WriteOnly(bits: 6..<8, as: BitField2.self)
+    @WriteOnly(bits: 6..<8)
     var RXTrig: RXTrigField
     
-    @WriteOnly(bits: 4..<6, as: BitField2.self)
+    @WriteOnly(bits: 4..<6)
     var TXTrig: TXTrigField
     
     @WriteOnly(bits: 3..<4, as: Bool.self)
@@ -107,5 +130,16 @@ struct FCRRegister {
     
     @WriteOnly(bits: 0..<1, as: Bool.self)
     var EN: ENField
+    
+}
+
+@Register(bitWidth: 16)
+struct LSRRegister {  // UART
+    
+    @ReadOnly(bits: 6..<7, as: Bool.self)
+    var TXSRE: TXSREField
+    
+    @ReadOnly(bits: 5..<6, as: Bool.self)
+    var TXFIFOE: TXFIFOEField
     
 }
