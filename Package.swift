@@ -30,6 +30,8 @@ let package = Package(
                 .enableExperimentalFeature("Embedded"),
                 .unsafeFlags([
                     "-Xfrontend", "-function-sections", // Enables dead stripping of unused runtime functions
+                    "-Xfrontend", "-disable-stack-protector",
+                    "-Xfrontend", "-no-allocations",
                     "-wmo", // Whole-module optimization is always required for Embedded Swift
                     "-Xcc", "-mthumb",
                     "-Xcc", "-fshort-enums",
