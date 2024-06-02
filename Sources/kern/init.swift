@@ -42,6 +42,11 @@ func initialize() {
     // 16x mode (required by AM335X)
     uart.MDR1.modify { $0.raw.ModeSelect = 0 }
 
+    uart.IER.modify {
+        $0.RHRIT = true
+        $0.THRIT = true
+    }
+
     print("santOS on BeagleBone Black!!!!!!!!!")
     
     while true {

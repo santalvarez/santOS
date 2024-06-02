@@ -17,6 +17,9 @@ struct UART0 {
     
     @RegisterBank(offset: 0x0)
     var DLL: Register<DLLRegister>
+
+    @RegisterBank(offset: 0x4)
+    var IER: Register<IERRegister>
     
     @RegisterBank(offset: 0x4)
     var DLH: Register<DLHRegister>
@@ -32,6 +35,7 @@ struct UART0 {
      
     @RegisterBank(offset: 0x20)
     var MDR1: Register<MDR1Register>
+
 }
 
 // Transmitter Holding Register
@@ -53,6 +57,18 @@ struct RHRRegister {
 struct DLLRegister {
     @ReadWrite(bits: 0..<8)
     var ClockLSB: ClockLSBField
+}
+
+@Register(bitWidth: 16)
+struct IERRegister {
+    @ReadWrite(bits: 0..<1, as: Bool.self)
+    var RHRIT: RHRITField
+
+    @ReadWrite(bits: 1..<2, as: Bool.self)
+    var THRIT: THRITField
+    
+    @ReadWrite(bits: 2..<3, as: Bool.self)
+    var LineStatusIT: LineStatusITField
 }
 
 @Register(bitWidth: 16)
