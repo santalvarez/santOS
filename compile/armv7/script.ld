@@ -31,4 +31,31 @@ SECTIONS
     _end = ABSOLUTE(.);         /* _end: end of image */
     . = ALIGN(4096);
   }
+
+  /* Exception unwinding information (required by the linker) */
+  .ARM.exidx :
+  {
+    *(.ARM.exidx*)
+  }
+
+  /* Discard sections that are not needed in the final bare-metal image */
+  /DISCARD/ :
+  {
+    *(.swift_modhash)
+    *(.ARM.attributes)
+    *(.comment)
+    *(.note*)
+    *(.swift_ast*)
+  }
+
+  /* String tables required by ELF format */
+  .strtab :
+  {
+    *(.strtab)
+  }
+  .shstrtab :
+  {
+    *(.shstrtab)
+  }
+  .symtab : { *(.symtab) }
 }
