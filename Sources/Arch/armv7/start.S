@@ -20,7 +20,7 @@ _start:
   bl	bzero
 
   // Call initialize to start santOS (does not return)
-  bl	initialize
+  bl	main
 
 // Function to zero memory (r0 is lowest addr; r1 is highest)
 bzero:

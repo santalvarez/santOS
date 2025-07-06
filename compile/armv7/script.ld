@@ -46,6 +46,24 @@ SECTIONS
     *(.comment)
     *(.note*)
     *(.swift_ast*)
+    /* Debug sections */
+    *(.debug_info)
+    *(.debug_abbrev)
+    *(.debug_aranges)
+    *(.debug_line)
+    *(.debug_line_str)
+    *(.debug_loc)
+    *(.debug_ranges)
+    *(.debug_str)
+    *(.debug_names)
+    *(.debug_frame)
+    *(.debug_pubtypes)
+    *(.debug_pubnames)
+    *(.debug_macinfo)
+    *(.debug_macro)
+    *(.debug_types)
+    *(.debug_gnu_pubtypes)
+    *(.debug_gnu_pubnames)
   }
 
   /* String tables required by ELF format */

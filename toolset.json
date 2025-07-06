@@ -2,9 +2,8 @@
     "schemaVersion": "1.0",
     "swiftCompiler": {
         "extraCLIOptions": [
-            "-Osize",
             "-enable-experimental-feature", "Embedded",
-            "-Xfrontend", "-no-allocations",
+            "-whole-module-optimization",
             "-Xfrontend", "-function-sections",
             "-Xfrontend", "-disable-stack-protector",
             "-Xclang-linker", "-nostdlib",
