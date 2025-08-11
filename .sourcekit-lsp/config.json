@@ -1,9 +1,9 @@
 {
     "swiftPM": {
         "configuration": "release",
-        "triple": "armv7-unknown-none-eabi",
-        "swiftCompilerFlags": [
-            "-enable-experimental-feature", "Embedded"
+        "triple": "armv7-none-none-eabi",
+        "toolsets": [
+            "toolset.json"
         ]
     }
 }
