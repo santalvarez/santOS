@@ -3,10 +3,9 @@
 public struct Kernel {
     public static func main() {
 
-        // let uart = PL011(unsafeAddress: 0x0900_0000)
+        let uart = PL011()
 
         while true {
         }
     }
 }
-
