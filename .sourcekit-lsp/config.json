@@ -2,8 +2,6 @@
     "swiftPM": {
         "configuration": "release",
         "triple": "armv7-none-none-eabi",
-        "toolsets": [
-            "toolset.json"
-        ]
+        "toolsets": ["toolset.json"]
     }
 }

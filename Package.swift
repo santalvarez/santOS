@@ -1,4 +1,4 @@
-// swift-tools-version: 6.1
+// swift-tools-version: 6.2
 
 import PackageDescription
 
@@ -10,13 +10,10 @@ let package = Package(
     targets: [
         .executableTarget(
             name: "Kern",
-            dependencies: ["ArmV7"],
-            path: "Sources/Kern"
+            dependencies: ["Arch"],
         ),
         .target(
-            name: "ArmV7",
-            path: "Sources/Arch/armv7"
+            name: "Arch",
         )
-    ],
-    swiftLanguageModes: [.v6]
+    ]
 )

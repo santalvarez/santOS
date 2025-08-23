@@ -1,6 +1,6 @@
 OUTPUT_ARCH(arm)
 ENTRY(_start)
-physbase = 0x81000000;
+physbase = 0x40200000;
 
 SECTIONS
 {
