@@ -16,7 +16,6 @@
             "-nostdlib",
             "-static",
             "--gc-sections",
-            "--orphan-handling=error",
             "-T", "compile/armv7/script.ld",
             "-Map", ".build/kern.map"
         ]

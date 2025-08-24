@@ -1,37 +1,35 @@
-#include <armv7a.h>
+/* start.S — tiny A32 startup for Cortex-A15 / QEMU virt */
+  .syntax unified
+  .cpu cortex-a15
+  .arch armv7-a
 
-// start - Initial entry point for santOS
+  .extern __bss_start__
+  .extern __bss_end__
+  .extern stack_top
 
-.text
-.globl	_start			// Declare entry point global
-
+  .section .text.start, "ax", %progbits
+  .global _start
 _start:
-  // Load the stack pointer with end of memory
-  ldr	sp, =MAXADDR
+  /* go to SVC, mask IRQ/FIQ so we can ignore vectors for now */
+  mrs     r0, cpsr
+  bic     r0, r0, #0x1f
+  orr     r0, r0, #0x13            @ SVC
+  orr     r0, r0, #(1<<7)|(1<<6)   @ I=1, F=1
+  msr     cpsr_c, r0
 
-  // Enable the instruction cache
-  mrc	p15, 0, r0, c1, c0, 0
-  orr	r0, r0, #ARMV7A_C1CTL_I
-  mcr	p15, 0, r0, c1, c0, 0
+  /* set up a stack */
+  ldr     sp, =stack_top
 
-  // Use bzero (below) to zero out the BSS area
-  ldr	r0, =edata
-  ldr	r1, =end
-  bl	bzero
+  /* clear .bss: for (p=bss; p<ebss; p+=4) *p = 0; */
+  ldr     r0, =__bss_start__
+  ldr     r1, =__bss_end__
+  mov     r2, #0
+1:  cmp     r0, r1
+  bcs     2f
+  str     r2, [r0], #4
+  b       1b
+2:
+  bl      Kern_main
 
-  // Call initialize to start santOS (does not return)
-  bl	main
-
-// Function to zero memory (r0 is lowest addr; r1 is highest)
-bzero:
-  mov	r2, #0			       // Round address to multipl
-  add	r0, r0, #3		       // of four by adding 3 and
-  and	r0, r0, #0xFFFFFFFC	   // taking the result module 4
-
-bloop:	cmp	r0, r1             // Loop until last address
-  bhs	bexit			       // has been reached
-  str	r2, [r0]		       // Zero four-byte word of memory
-  add	r0, r0, #4		       // Move to next word
-  b	bloop			           // Continue to iterate
-
-bexit:	mov	pc, lr			   // Return to caller
+hang:
+  b       hang
